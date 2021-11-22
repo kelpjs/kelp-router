@@ -1,7 +1,7 @@
 const { METHODS } = require('http');
 const routing = require('routing2');
 
-function Router(table) {
+function Router() {
   const routes = [];
   async function run(req, res, next) {
     const { status, route } = routing.find(routes, req);
@@ -14,18 +14,10 @@ function Router(table) {
     routes.push(routing.create({ method, path, action }));
     return run;
   };
-  METHODS.forEach(method => {
+  for (const method of METHODS) {
     run[method.toLowerCase()] = (path, action) => {
       return run.route(method, path, action);
     };
-  });
-  if (typeof table === 'object') {
-    for (const rule in table) {
-      let p = rule.split(' ');
-      p = p.length === 1 ? ['get'].concat(p) : p;
-      const [method, path] = p;
-      run.route(method, path, table[rule]);
-    }
   }
   return run;
 };

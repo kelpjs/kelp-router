@@ -4,7 +4,7 @@ const Router = require('..');
 
 const app = kelp();
 
-const router = new Router()
+const router = new Router();
 
 app.use(router);
 
